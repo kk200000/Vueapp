@@ -6,23 +6,33 @@
              text-color="#fff"
              active-text-color="#ffd04b"
     >
-      <h3>管理系统</h3>
-      <el-menu-item @click="clickMemu(item)" v-for="item in nochildren" :key="item.name" v-bind:index="item.name">
-        <i class=""></i>
-        <span slot="title"></span>
+      <h3>通用后台管理系统</h3>
+<!--      无子菜单-->
+      <el-menu-item @click="clickMemu(item)" v-for="item in nochildren" :key="item.name" :index="item.name">
+        <i :class="`el-icon-${item.icon}`"></i>
+        <span slot="title">{{item.label}}</span>
       </el-menu-item>
-      <el-submenu v-for="item in haschildren" :key="item.label" v-bind:index="item.label">
+
+
+<!--      有子菜单-->
+      <el-submenu v-for="item in haschildren" :key="item.label" v-bind:index="item.label" >
         <template slot="title">
-          <i class=""></i>
-          <span slot="title"></span>
+          <i :class="`el-icon-${item.icon}`"></i>
+          <span slot="title">{{item.label}}</span>
         </template>
-        <el-menu-item-group >
-          <el-menu-item ></el-menu-item>
+
+        <el-menu-item-group v-for="child in item.children" :key="child.name" :index="child.name" >
+
+          <el-menu-item :index="child.name" @click="clickMemu(child)">
+            <i :class="`el-icon-${child.icon}`"></i>
+            {{child.label}}
+          </el-menu-item>
         </el-menu-item-group>
       </el-submenu>
 
 
     </el-menu>
+
   </div>
 
 </template>
@@ -42,7 +52,6 @@
 export default {
   data() {
     return {
-
       menuData: [
         {
           path: '/',
@@ -72,14 +81,14 @@ export default {
             {
               path: '/page1',
               name: 'page1',
-              label: '首页',
+              label: '首页1',
               icon: 'setting',
               url: 'Other/PageOne'
             },
             {
               path: '/page2',
               name: 'page2',
-              label: '首页',
+              label: '首页2',
               icon: 'setting',
               url: 'Other/PageTwo'
             }
@@ -91,11 +100,19 @@ export default {
   computed:{
     // 没有子菜单
     nochildren:function(){
-
+      return this.menuData.filter((item)=>{
+            if (!item.children){
+              return item
+            }
+        })
     },
     // 有子菜单
     haschildren:function(){
-
+      return this.menuData.filter((item)=>{
+        if (item.children){
+          return item
+        }
+      })
     },
     isCollapse(){
       return this.$store.state.tab.isCollapse;
@@ -108,8 +125,14 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
-    clickMemu(item){
 
+    clickMemu(item){
+      console.log(item.path)
+      if(item.path==='/'&&this.$route.path==='/home'){
+
+      }
+      else if (item.path!==this.$route.path)
+        this.$router.push(item.path)
 
     },
 
