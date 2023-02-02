@@ -2,7 +2,7 @@
   <div>
     <el-container>
 
-      <el-aside >
+      <el-aside width="auto">
           <Caside></Caside>
       </el-aside>
 
@@ -38,6 +38,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  .el-header{
+    padding: 0;
+  }
+
 
 </style>

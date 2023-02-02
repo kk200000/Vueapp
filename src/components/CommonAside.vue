@@ -6,7 +6,9 @@
              text-color="#fff"
              active-text-color="#ffd04b"
     >
-      <h3>通用后台管理系统</h3>
+
+      <h3 v-if="!isCollapse">通用后台管理系统</h3>
+      <h3 v-else>后台</h3>
 <!--      无子菜单-->
       <el-menu-item @click="clickMemu(item)" v-for="item in nochildren" :key="item.name" :index="item.name">
         <i :class="`el-icon-${item.icon}`"></i>
@@ -37,6 +39,7 @@
 
 </template>
 <style lang="less" scoped>
+// 菜单展开时
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
@@ -46,6 +49,20 @@
     color: #fff;
     line-height: 48px;
   }
+}
+
+// 折叠菜单时
+.el-menu-vertical-demo{
+  height: 100vh;
+  h3{
+    text-align: center;
+    color: #fff;
+    line-height: 48px;
+  }
+}
+
+.el-menu{
+  border: 0;
 }
 </style>
 <script>
@@ -127,13 +144,14 @@ export default {
     },
 
     clickMemu(item){
-      console.log(item.path)
       if(item.path==='/'&&this.$route.path==='/home'){
 
       }
       else if (item.path!==this.$route.path)
         this.$router.push(item.path)
 
+      // console.log(item)
+      this.$store.commit('updateMenu',item)
     },
 
   },
